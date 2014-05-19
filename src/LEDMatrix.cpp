@@ -1,7 +1,7 @@
-/* 
+/*
  * File:   LEDMatrix.cpp
- * Author: Brian Ho
- * 
+ * Author: Brian Ho <brian@codeforart.com>
+ *
  * Created on May 19, 2014, 10:23 AM
  */
 
@@ -11,7 +11,7 @@ LEDMatrix::LEDMatrix(u_int8_t chips) {
     unsigned char i;
 
     iNumOfChips = chips;
-    columns = 8 * iNumOfChips * 2;
+    columns = 8 * iNumOfChips;
 
     pinMode(CS0, OUTPUT);
     pinMode(DIN, OUTPUT);
@@ -76,7 +76,7 @@ void LEDMatrix::clear(void) {
     }
 }
 
-int LEDMatrix::write(unsigned char reg, unsigned char data) {
+int LEDMatrix::write(u_int8_t reg, u_int8_t data) {
     u_int8_t i = 16;
 
     unsigned short mot = (reg << 8) | data;

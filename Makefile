@@ -10,10 +10,11 @@ EXECUTABLE=led_matrix
 all: $(SOURCES) $(EXECUTABLE)
 	
 $(EXECUTABLE): $(OBJECTS) 
+	mkdir -p build
 	$(CC) $(LDFLAGS) $(OBJECTS) -o build/$@
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
 clean:
 	rm -f src/*.o
-	rm -f build/$(EXECUTABLE)
+	rm -rf build

@@ -37,7 +37,7 @@ public:
 
     void latch();
     void clear();
-    int write(unsigned char reg, unsigned char data);
+    int write(u_int8_t reg, u_int8_t data);
     void flip(short offset);
 
 

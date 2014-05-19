@@ -37,65 +37,69 @@ void setup_io();
 
 
 int main (int argc, char **argv) {
-  int opt, flag, n_pin, n_alt;
-  flag=0;
+    int opt, flag, n_pin, n_alt;
+    flag=0;
 
-  while ((opt = getopt (argc, argv, "hp:f:")) != -1) {
-    switch (opt) {
-    case 'h':
-      break;
-    case 'p':
-      n_pin = atoi(optarg); flag |= 0b0001; break;
-    case 'f':
-      n_alt = atoi(optarg); flag |= 0b0010; break;
-    case '?':
-      // getopt() prints error messages, so don't need to repeat them here
-      return 1;
-    default:
-      abort ();
+    while ((opt = getopt (argc, argv, "hp:f:")) != -1) {
+        switch (opt) {
+        case 'h':
+            break;
+        case 'p':
+            n_pin = atoi(optarg);
+            flag |= 0b0001;
+            break;
+        case 'f':
+            n_alt = atoi(optarg);
+            flag |= 0b0010;
+            break;
+        case '?':
+            // getopt() prints error messages, so don't need to repeat them here
+            return 1;
+        default:
+            abort ();
+        }
     }
-  }
-  
-  if (flag != 0b0011) {
-    fprintf (stderr, "Usage:\n$ gpio_alt -p PIN_NUM -f FUNC_NUM\n");
-    return 1;
-  }
-  
-  setup_io(); // Set up gpi pointer for direct register access
-  INP_GPIO(n_pin);  // Always use INP_GPIO(x) before using SET_GPIO_ALT(x,y)
-  SET_GPIO_ALT(n_pin, n_alt);
-  
-  printf("Set pin %i to alternative-function %i\n", n_pin, n_alt);
-  
-  return 0;
+
+    if (flag != 0b0011) {
+        fprintf (stderr, "Usage:\n$ gpio_alt -p PIN_NUM -f FUNC_NUM\n");
+        return 1;
+    }
+
+    setup_io(); // Set up gpi pointer for direct register access
+    INP_GPIO(n_pin);  // Always use INP_GPIO(x) before using SET_GPIO_ALT(x,y)
+    SET_GPIO_ALT(n_pin, n_alt);
+
+    printf("Set pin %i to alternative-function %i\n", n_pin, n_alt);
+
+    return 0;
 }
 
 
 
 void setup_io() {
-   /* open /dev/mem */
-   if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0) {
-      printf("can't open /dev/mem \n");
-      exit(-1);
-   }
+    /* open /dev/mem */
+    if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0) {
+        printf("can't open /dev/mem \n");
+        exit(-1);
+    }
 
-   /* mmap GPIO */
-   gpio_map = mmap(
-      NULL,             //Any adddress in our space will do
-      BLOCK_SIZE,       //Map length
-      PROT_READ|PROT_WRITE,// Enable reading & writting to mapped memory
-      MAP_SHARED,       //Shared with other processes
-      mem_fd,           //File to map
-      GPIO_BASE         //Offset to GPIO peripheral
-   );
+    /* mmap GPIO */
+    gpio_map = mmap(
+                   NULL,             //Any adddress in our space will do
+                   BLOCK_SIZE,       //Map length
+                   PROT_READ|PROT_WRITE,// Enable reading & writting to mapped memory
+                   MAP_SHARED,       //Shared with other processes
+                   mem_fd,           //File to map
+                   GPIO_BASE         //Offset to GPIO peripheral
+               );
 
-   close(mem_fd); //No need to keep mem_fd open after mmap
+    close(mem_fd); //No need to keep mem_fd open after mmap
 
-   if (gpio_map == MAP_FAILED) {
-      printf("mmap error %d\n", (int)gpio_map);//errno also set!
-      exit(-1);
-   }
+    if (gpio_map == MAP_FAILED) {
+        printf("mmap error %d\n", (int)gpio_map);//errno also set!
+        exit(-1);
+    }
 
-   // Always use volatile pointer!
-   gpio = (volatile unsigned *)gpio_map;
+    // Always use volatile pointer!
+    gpio = (volatile unsigned *)gpio_map;
 }

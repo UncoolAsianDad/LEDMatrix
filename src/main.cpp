@@ -5,9 +5,7 @@ int main(int argc, char *argv[]) {
 
     short k;
 
-    if (wiringPiSetup() < 0)
-        //if (wiringPiSPISetup(CHANNEL, 1000000) < 0)
-    {
+    if (wiringPiSetup() < 0) {
         fprintf(stderr, "setup failed\n");
         exit(1);
     }
