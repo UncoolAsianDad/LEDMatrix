@@ -15,14 +15,14 @@ int main(int argc, char *argv[]) {
     delay(1000);
 
     // shifting to the left
-    for (k = 0; k < 16; k++) {
+    for (k = 0; k < 0xFF-16; k++) {
         lm->flip(k);
         delay(10);
     }
 
     delay(1000);
 
-    for (k = 16; k >= 0; k--) {
+    for (k; k >= 0; k--) {
         lm->flip(k);
         delay(10);
     }

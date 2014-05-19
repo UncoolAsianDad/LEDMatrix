@@ -11,7 +11,7 @@ LEDMatrix::LEDMatrix(u_int8_t chips) {
     unsigned char i;
 
     iNumOfChips = chips;
-    columns = 8 * iNumOfChips;
+    columns = 0xFF;//8 * iNumOfChips;
 
     pinMode(CS0, OUTPUT);
     pinMode(DIN, OUTPUT);
@@ -113,7 +113,7 @@ void LEDMatrix::flip(short offset) {
 
     for (i = 1; i <= 8; i++) {
         for (j = 0; j < iNumOfChips; j++) {
-            ptr = buffer + (j * 8 + i) - 1;
+            ptr = buffer + ((j << 3) | i) - 1;
             //~ printf("%02X\n", *ptr);
 
             write(i, *(ptr + offset));
