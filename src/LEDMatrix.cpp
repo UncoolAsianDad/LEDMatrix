@@ -17,7 +17,7 @@ LEDMatrix::LEDMatrix(u_int8_t DIN, u_int8_t CS0, u_int8_t CLK, u_int8_t chips):L
 }
 
 LEDMatrix::LEDMatrix(u_int8_t chips) {
-    unsigned char i;
+    unsigned short i;
 
     iNumOfChips = chips;
     columns = 0x100;
@@ -114,20 +114,34 @@ int LEDMatrix::write(u_int8_t reg, u_int8_t data) {
     return 0;
 }
 
+void LEDMatrix::shiftLeft(short offset) {
+	this->offset += offset;
+	
+	this->offset %= this->columns;
+
+}
+
+void LEDMatrix::shiftRight(short offset) {
+	this->offset -= offset;
+	
+	this->offset %= this->columns;
+}
+
+
 /**
  * Flips the screen over
  * @param offset
  */
-void LEDMatrix::flip(short offset) {
+void LEDMatrix::flip() {
     char i, j, *ptr;
 
     for (i = 1; i <= 8; i++) {
         for (j = 0; j < iNumOfChips; j++) {
             ptr = buffer + ((j << 3) | i) - 1;
-            //~ printf("%02X\n", *ptr);
-
+    
             write(i, *(ptr + offset));
         }
         latch();
     }
+    
 }

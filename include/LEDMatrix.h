@@ -36,7 +36,9 @@ public:
     void latch();
     void clear();
     int write(u_int8_t reg, u_int8_t data);
-    void flip(short offset);
+    void flip();
+    void shiftLeft(short offset=1);
+    void shiftRight(short offset=1);
 
 
 private:
@@ -46,6 +48,7 @@ private:
     u_int8_t iNumOfChips;
     u_int16_t columns;
     char *buffer;
+    short offset = 0;
 
 };
 
