@@ -20,18 +20,19 @@ LEDMatrix::LEDMatrix(u_int8_t chips) {
     unsigned short i;
 
     iNumOfChips = chips;
-    columns = 0x100;
+    columns = chips << 3;
 
     pinMode(CS0, OUTPUT);
     pinMode(DIN, OUTPUT);
     pinMode(CLK, OUTPUT);
 
-    buffer = (char*) malloc(columns);
-
+	// malloc and set them all zero
+    buffer = (char*) calloc(1, columns);
+/*
     for (i = 0; i < columns; i++) {
         buffer[i] = i + 1;
     }
-
+*/
     for (i = 0; i <= iNumOfChips; i++)
         write(REG_SCAN_LIMIT, 0x07);
     latch();
@@ -128,9 +129,24 @@ void LEDMatrix::shiftRight(short offset) {
 }
 
 
+void LEDMatrix::print(char* s) {
+	unsigned int i;
+	
+	delete buffer;
+	
+	columns = strlen(s)<<3;
+	buffer = (char*)calloc(1,columns);
+	
+	for (i=0;i<strlen(s); i++) {
+		memcpy(buffer + (i<<3), cp437_font[(unsigned char)s[i]], 0x8);
+	}
+	
+	
+}
+
+
 /**
  * Flips the screen over
- * @param offset
  */
 void LEDMatrix::flip() {
     char i, j, *ptr;

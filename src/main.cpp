@@ -1,4 +1,5 @@
 #include <wiringPi.h>
+
 #include "../include/LEDMatrix.h"
 
 int main(int argc, char *argv[]) {
@@ -11,26 +12,21 @@ int main(int argc, char *argv[]) {
     }
 
     LEDMatrix *lm = new LEDMatrix(2);
+    
+    lm->print("Hello World");
 
-    delay(1000);
+	//~ for (;;)
+	{
+		delay(100);
 
-    // shifting to the left
-    for (k = 0; k < 0xFF-16; k++) {
-        lm->flip(k);
-        delay(10);
-    }
-
-    delay(1000);
-
-    for (k; k >= 0; k--) {
-        lm->flip(k);
-        delay(10);
-    }
-
-
+		// shifting to the left
+		for (k = 0; k < 100; k++) {
+			lm->shiftLeft();
+			lm->flip();
+			delay(40);
+		}
+	}
     return 0;
-    //
-
 }
 
 

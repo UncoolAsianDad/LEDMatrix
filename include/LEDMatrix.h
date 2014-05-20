@@ -10,9 +10,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <wiringPi.h>
-#include <time.h>
 #include <string.h>
+#include <wiringPi.h>
 
 
 #define REG_NOOP 	0x00
@@ -39,14 +38,17 @@ public:
     void flip();
     void shiftLeft(short offset=1);
     void shiftRight(short offset=1);
-
+    void print(char* s);
+    
+    
+    
+    u_int16_t columns;
 
 private:
 
 	u_int8_t CS0 = 10, DIN = 12, CLK = 14;
 
     u_int8_t iNumOfChips;
-    u_int16_t columns;
     char *buffer;
     short offset = 0;
 
