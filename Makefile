@@ -1,6 +1,6 @@
 
 CC=g++
-CFLAGS=-c -Wall -g
+CFLAGS=-c -Wall -std=c++11
 LDFLAGS=-lwiringPi
 SOURCES=src/LEDMatrix.cpp src/main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
