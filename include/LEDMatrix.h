@@ -1,6 +1,6 @@
 /* 
- * File:   LedMatrix.h
- * Author: hikaru
+ * File:   LEDMatrix.h
+ * Author: Brian Ho <brian@codeforart.com>
  *
  * Created on May 19, 2014, 10:23 AM
  */
@@ -13,11 +13,7 @@
 #include <wiringPi.h>
 #include <time.h>
 #include <string.h>
-//#include "../include/font.h"
 
-#define CS0		10
-#define DIN		12
-#define CLK		14
 
 #define REG_NOOP 	0x00
 #define REG_DECODE 	0x09
@@ -31,7 +27,9 @@
 
 class LEDMatrix {
 public:
-    LEDMatrix(u_int8_t chips);
+	LEDMatrix(u_int8_t chips);
+	LEDMatrix(u_int8_t DIN, u_int8_t CS0, u_int8_t CLK, u_int8_t chips);
+    
     //    LedMatrix(const LedMatrix& orig);
     virtual ~LEDMatrix();
 
@@ -42,6 +40,8 @@ public:
 
 
 private:
+
+	u_int8_t CS0 = 10, DIN = 12, CLK = 14;
 
     u_int8_t iNumOfChips;
     u_int16_t columns;

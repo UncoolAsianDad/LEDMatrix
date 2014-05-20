@@ -6,12 +6,21 @@
  */
 
 #include "../include/LEDMatrix.h"
+#include "../include/font.h"
+
+LEDMatrix::LEDMatrix(u_int8_t DIN, u_int8_t CS0, u_int8_t CLK, u_int8_t chips):LEDMatrix(chips) {
+	
+	this->CS0 = CS0;
+	this->DIN = DIN;
+	this->CLK = CLK;
+	
+}
 
 LEDMatrix::LEDMatrix(u_int8_t chips) {
     unsigned char i;
 
     iNumOfChips = chips;
-    columns = 0xFF;//8 * iNumOfChips;
+    columns = 0x100;
 
     pinMode(CS0, OUTPUT);
     pinMode(DIN, OUTPUT);
@@ -68,6 +77,7 @@ void LEDMatrix::latch(void) {
 
 void LEDMatrix::clear(void) {
     unsigned char i, j;
+    
     for (i = 1; i <= 8; i++) {
         for (j = 0; j <= iNumOfChips; j++)
             write(i, 0x00);
